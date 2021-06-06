@@ -2,7 +2,9 @@ import galleryItems from './gallery-items.js';
 
 const gallery = document.querySelector('.js-gallery');
 const modal = document.querySelector('.js-lightbox');
-// const button = document.querySelector('.lightbox__button');
+const modalImage = modal.querySelector('.lightbox__image');
+
+let activeImage;
 
 /*Формирование разметки галереи*/
 const markup = galleryItems.map(({ preview, original, description }) => {
@@ -17,33 +19,81 @@ const markup = galleryItems.map(({ preview, original, description }) => {
 gallery.insertAdjacentHTML('afterbegin', markup);
 
 /*Функция-обработчик клика на елемент галереи*/
-const onGalleryItemClick = (e) => {
+const onGalleryItemClick = e => {
     e.preventDefault();
     
     if (e.target.nodeName !== 'IMG') {
         return;
     }
 
-    openModal();
+    activeImage = e.target;
+        
+    openModal(e);
 };
 
-/*Функция-обработчик клика на кнопку закрытия модалки*/
-const onButtonClick = (e) => {
-    const isCloseButton = e.target.dataset.action === 'close-lightbox';
-    
-    if (!isCloseButton) {
+/*Функция-обработчик клика на кнопку закрытия или пустую площадь модалки*/
+const onModalElemsClick = e => {
+    const isCloseButton= e.target.dataset.action === 'close-lightbox';
+    const isModalArea = e.target.classList.contains('lightbox__overlay');
+   
+    if (!isCloseButton && !isModalArea){
         return;
     }
 
     closeModal();
- };
+};
+ 
+/*Функция-обработчик нажатия клавиши клавиатуры*/
+const onKeyboardPress = e => {
+    if (e.code === 'Escape') {
+        closeModal();
+        return;
+    }
+
+    if (e.code === 'ArrowLeft') {
+        const previousSiblingBranch = activeImage.closest('li').previousElementSibling;
+
+        if (previousSiblingBranch) {
+            const previousImage = previousSiblingBranch.querySelector('.gallery__image');
+            changeImage(previousImage);
+        }
+        return;
+    }
+
+    if (e.code === 'ArrowRight') {
+        const nextSiblingBranch = activeImage.closest('li').nextElementSibling;
+
+        if (nextSiblingBranch) {
+            const nextImage = nextSiblingBranch.querySelector('.gallery__image');
+            changeImage(nextImage);
+        }
+        return;
+    }
+};
 
 /*Функция открытия модалки*/
-const openModal = () => modal.classList.add('is-open');
+const openModal = e => {
+    modal.classList.add('is-open');
+    modalImage.src= e.target.dataset.source;
+    modalImage.alt = e.target.getAttribute('alt');
+    window.addEventListener('keydown', onKeyboardPress);
+}
 
 /*Функция закрытия модалки*/
-const closeModal = () => modal.classList.remove('is-open');
+const closeModal = () => {
+    modal.classList.remove('is-open');
+    modalImage.src = '';
+    modalImage.alt = '';
+    window.removeEventListener('keydown', onKeyboardPress);
+}
+
+/*Функция смены картинки в модалке*/
+const changeImage = target => {
+    modalImage.src= target.dataset.source;
+    modalImage.alt = target.getAttribute('alt');
+    activeImage = target;
+ };
 
 
 gallery.addEventListener('click', onGalleryItemClick);
-modal.addEventListener('click', onButtonClick);
+modal.addEventListener('click', onModalElemsClick);
