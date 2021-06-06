@@ -26,8 +26,6 @@ const onGalleryItemClick = e => {
         return;
     }
 
-    activeImage = e.target;
-        
     openModal(e);
 };
 
@@ -76,6 +74,8 @@ const openModal = e => {
     modal.classList.add('is-open');
     modalImage.src= e.target.dataset.source;
     modalImage.alt = e.target.getAttribute('alt');
+    activeImage = e.target;
+
     window.addEventListener('keydown', onKeyboardPress);
 }
 
@@ -84,6 +84,7 @@ const closeModal = () => {
     modal.classList.remove('is-open');
     modalImage.src = '';
     modalImage.alt = '';
+    
     window.removeEventListener('keydown', onKeyboardPress);
 }
 
