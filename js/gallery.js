@@ -8,7 +8,7 @@ let activeImage;
 
 /*Функция формирования разметки галереи*/
 const makeMarkup = (galleryRef,items) => {
-    const markup = items.reduce((acc, { preview, original, description }) => {
+    galleryRef.innerHTML = items.reduce((acc, { preview, original, description }) => {
         return acc + `
             <li class="gallery__item">
             <a class="gallery__link" href="${original}">
@@ -16,8 +16,6 @@ const makeMarkup = (galleryRef,items) => {
             </a>
             </li>`
     }, '');
-    
-    galleryRef.innerHTML = markup;
 };
 
 /*Функция-обработчик клика на елемент галереи*/
