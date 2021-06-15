@@ -6,17 +6,19 @@ const modalImage = modal.querySelector('.lightbox__image');
 
 let activeImage;
 
-/*Формирование разметки галереи*/
-const markup = galleryItems.map(({ preview, original, description }) => {
-    return `
-    <li class="gallery__item">
-    <a class="gallery__link" href="${original}">
-    <img class="gallery__image class="gallery__image" src="${preview}" data-source="${original}" alt="${description}">
-    </a>
-    </li>`
-}).join('');
-
-gallery.insertAdjacentHTML('afterbegin', markup);
+/*Функция формирование разметки галереи*/
+const makeMarkup = (galleryRef,items) => {
+    const markup = items.reduce((acc, { preview, original, description }) => {
+        return acc + `
+            <li class="gallery__item">
+            <a class="gallery__link" href="${original}">
+            <img class="gallery__image class="gallery__image" src="${preview}" data-source="${original}" alt="${description}">
+            </a>
+            </li>`
+    }, '');
+    
+    galleryRef.innerHTML = markup;
+};
 
 /*Функция-обработчик клика на елемент галереи*/
 const onGalleryItemClick = e => {
@@ -95,6 +97,6 @@ const changeImage = target => {
     activeImage = target;
  };
 
-
+makeMarkup(gallery,galleryItems);
 gallery.addEventListener('click', onGalleryItemClick);
 modal.addEventListener('click', onModalElemsClick);
