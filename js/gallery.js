@@ -6,7 +6,7 @@ const modalImage = modal.querySelector('.lightbox__image');
 
 let activeImage;
 
-/*Функция формирование разметки галереи*/
+/*Функция формирования разметки галереи*/
 const makeMarkup = (galleryRef,items) => {
     const markup = items.reduce((acc, { preview, original, description }) => {
         return acc + `
