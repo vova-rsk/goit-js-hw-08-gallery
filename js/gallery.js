@@ -77,6 +77,7 @@ const openModal = e => {
     activeImage = e.target;
 
     window.addEventListener('keydown', onKeyboardPress);
+    modal.addEventListener('click', onModalElemsClick);
 }
 
 /*Функция закрытия модалки*/
@@ -86,6 +87,7 @@ const closeModal = () => {
     modalImage.alt = '';
     
     window.removeEventListener('keydown', onKeyboardPress);
+    modal.removeEventListener('click', onModalElemsClick);
 }
 
 /*Функция смены картинки в модалке*/
@@ -97,4 +99,3 @@ const changeImage = target => {
 
 makeMarkup(gallery,galleryItems);
 gallery.addEventListener('click', onGalleryItemClick);
-modal.addEventListener('click', onModalElemsClick);
